@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TodoController extends AbstractController
 {
     /**
-     * @Route("/", name="todo")
+     * @Route("", name="todo")
      */
     public function index(SessionInterface $session): Response
     {
@@ -26,7 +26,13 @@ class TodoController extends AbstractController
                 'mercredi' => 'Js',
             ];
             $session->set('todos', $todos);
-            $this->addFlash('info', "Bienvenu dans votre plateforme de gestion des todos");
+            if (!$session->get('reset')) {
+                $this->addFlash('info', "Bienvenu dans votre plateforme de gestion des todos");
+            }
+            else{
+                $session->set('reset',false);
+            }
+
         }
         return $this->render('todo/index.html.twig');
     }
@@ -64,6 +70,7 @@ class TodoController extends AbstractController
         // Vérifier que ma session contient le tableau de todo
         if (!$session->has('todos')) {
             //ko => messsage erreur + redirection
+
             $this->addFlash('error', "La liste des todos n'est pas encore initialisée");
         } else {
             //ok
@@ -88,7 +95,8 @@ class TodoController extends AbstractController
      */
     public function resetTodo(SessionInterface $session) {
         $session->remove('todos');
-
+        $this->addFlash('success', "La liste des todos a été bien réinitialiseé");
+        $session->set('reset', true);
         return $this->redirectToRoute('todo');
     }
 }
