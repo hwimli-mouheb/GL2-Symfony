@@ -2,11 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
+use App\Form\ProductType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Product;
 /**
  * @Route("/product")
  */
@@ -26,18 +28,26 @@ class ProductController extends AbstractController
     }
 
     /**
-     * @Route ("/add/{name}/{description}/{price<\d+>}",name="product.add")
+     * @Route ("/add/{product?0}",name="product.add")
      */
-    public function addProduct($name,$description,$price,EntityManagerInterface $manager){
+    public function addProduct(EntityManagerInterface $manager,Request $request,Product $product=null){
+       if(!$product){
+           $product =new Product();
+       }
 
-        $product =new Product();
-        $product->setName($name);
-        $product->setDescription($description);
-        $product->setPrice($price);
-        $manager->persist($product);
-        $manager->flush();
-        return $this->render('product/detail.html.twig',[
-            'product'=> $product
+
+       $form= $this->createForm(ProductType::class , $product);
+       $form->handleRequest($request);
+       if($form->isSubmitted()){
+           $manager->persist($product);
+           $manager->flush();
+           $this->addFlash('success',"le produit ".$product->getName()." a été ajouté avec succes");
+           return $this->redirectToRoute('product.list');
+       }
+
+        return $this->render('product/add.html.twig',[
+
+            'form'=>$form->createView()
         ]);
 
     }
@@ -52,6 +62,7 @@ class ProductController extends AbstractController
       $product->setPrice($price);
       $manager->persist($product);
       $manager->flush();
+
   }
 
         return $this->render('product/detail.html.twig',[

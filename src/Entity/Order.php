@@ -28,11 +28,11 @@ class Order
     /**
      * @ORM\ManyToMany(targetEntity=Product::class)
      */
-    private $product;
+    private $products;
 
     public function __construct()
     {
-        $this->product = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -55,15 +55,15 @@ class Order
     /**
      * @return Collection|Product[]
      */
-    public function getProduct(): Collection
+    public function getProducts(): Collection
     {
-        return $this->product;
+        return $this->products;
     }
 
     public function addProduct(Product $product): self
     {
-        if (!$this->product->contains($product)) {
-            $this->product[] = $product;
+        if (!$this->products->contains($product)) {
+            $this->products[] = $product;
         }
 
         return $this;
@@ -71,7 +71,7 @@ class Order
 
     public function removeProduct(Product $product): self
     {
-        $this->product->removeElement($product);
+        $this->products->removeElement($product);
 
         return $this;
     }

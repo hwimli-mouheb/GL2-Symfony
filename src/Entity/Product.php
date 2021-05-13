@@ -3,14 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use App\Utilities\TimeStampTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Table(name="product")
  * @ORM\Entity(repositoryClass=ProductRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Product
 {
+    use TimeStampTrait;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -106,5 +110,8 @@ class Product
         $this->media = $media;
 
         return $this;
+    }
+    public function __toString(){
+        return $this->name;
     }
 }
