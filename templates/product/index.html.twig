@@ -1,0 +1,22 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Hello ProductController!{% endblock %}
+
+{% block body %}
+    <div class="row" >
+    {% for product in products %}
+
+    <div class="card col-5 m-2" style="...">
+        <div class="card-body">
+            <h5 class="card-title">Product Details</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ product.name }}</h6>
+            <p class="card-text">{{ product.description}} </p>
+            <p class="card-text">{{ product.price}} TND</p>
+            <a href="{{ path('product.detail',{'product' : product.id}) }}" class="card-link">Details</a>
+            <a href="{{ path('product.delete',{'product' : product.id}) }}" class="card-link">Delete</a>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+
+{% endblock %}

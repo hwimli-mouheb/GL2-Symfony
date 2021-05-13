@@ -1,0 +1,30 @@
+{% extends 'layout.html.twig' %}
+
+{% block body %}
+    {% if product %}
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Product Details</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ product.name }}</h6>
+            <p class="card-text">{{ product.description}} </p>
+            <p class="card-text">{{ product.price}} TND</p>
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+        </div>
+    </div>
+    {% else %}
+        {% if isDeleted is defined and isDeleted %}
+            <div class="alert alert-succes">
+                produit supprime
+            </div>
+{% endif %}
+    <div class="alert alert-danger">
+        produit inexistant
+    </div>
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+Product detail
+{% endblock %}
+
